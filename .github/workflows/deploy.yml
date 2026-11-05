@@ -1,0 +1,66 @@
+# Builds the Hugo site in site/ and publishes it to GitHub Pages on every push to main.
+name: Website veröffentlichen
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; a newer push replaces a queued one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      HUGO_VERSION: 0.131.0
+    steps:
+      - name: Hugo installieren
+        run: |
+          wget -q -O "${{ runner.temp }}/hugo.deb" \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb"
+          sudo dpkg -i "${{ runner.temp }}/hugo.deb"
+
+      - name: Inhalte holen
+        uses: actions/checkout@v4
+
+      - name: Pages einrichten
+        id: pages
+        uses: actions/configure-pages@v5
+
+      # baseURL stays https://starbushway.de/ (hugo.toml); with relativeURLs every link is
+      # page-relative, so the result also works on the temporary *.github.io/<repo>/ address.
+      - name: Seite bauen
+        env:
+          HUGO_ENVIRONMENT: production
+        run: hugo --source site --gc --minify --destination "${{ github.workspace }}/public"
+
+      - name: Links prüfen
+        run: python3 -I migration/checklinks.py public | tee /dev/stderr | grep -q ", 0 broken"
+
+      - name: Ergebnis hochladen
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Veröffentlichen
+        id: deployment
+        uses: actions/deploy-pages@v4

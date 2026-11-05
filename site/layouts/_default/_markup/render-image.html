@@ -1,0 +1,11 @@
+{{- /* Photos (JPEG) get a frame; small GIF/PNG decorations stay plain. */ -}}
+{{- $img := .Page.Resources.Get .Destination -}}
+{{- if not $img }}{{ $img = resources.Get (strings.TrimPrefix "/" .Destination) }}{{ end -}}
+{{- $alt := .Text -}}
+{{- if and $img (in (slice "jpeg" "png" "gif") $img.MediaType.SubType) -}}
+  {{- $class := cond (and (eq $img.MediaType.SubType "jpeg") (ge $img.Width 250)) "foto" "deko" -}}
+  {{- if and (not $alt) (eq $class "foto") }}{{ $alt = printf "Foto: %s" .Page.LinkTitle }}{{ end -}}
+  <img class="{{ $class }}" src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+{{- else -}}
+  <img class="deko" src="{{ .Destination | safeURL }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+{{- end -}}

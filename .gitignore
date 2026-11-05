@@ -1,0 +1,11 @@
+# Migration working files (re-creatable with migration/mirror.py)
+migration/source/
+migration/.venv/
+migration/public-check/
+
+# Hugo build output
+site/public/
+site/resources/_gen/
+site/.hugo_build.lock
+
+.DS_Store

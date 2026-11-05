@@ -1,0 +1,4 @@
+{{ define "main" }}
+  {{ .Content }}
+  {{ if not .IsHome }}{{ partial "zurueck.html" . }}{{ end }}
+{{ end }}

@@ -1,0 +1,196 @@
+/* Starbushway theme: the look of the 1999 site (paw-print paper, serif type, dark red,
+   pink marbled buttons), rebuilt to be responsive and easy to read. */
+:root {
+  --text: #111;
+  --text-leise: #444;
+  --rot: #990000;
+  --rot-dunkel: #6e0000;
+  --link: #0a37b0;
+  --link-besucht: #4b3a7a;
+  --rosa-hell: #fde8ee;
+  --rosa: #f3c6d4;
+  --rosa-rand: #d28ea4;
+  --papier: #fdfdfd;
+  --schatten: 0 2px 10px rgb(0 0 0 / 0.18);
+  --breite: 1200px;
+  --rand: 16px;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  color: var(--text);
+  background: var(--papier) url("../theme/pfote.jpg") repeat;
+  font: 1.125rem/1.6 Georgia, "Times New Roman", Times, serif;
+  text-align: center;
+}
+
+a { color: var(--link); text-underline-offset: 0.15em; }
+a:visited { color: var(--link-besucht); }
+a:hover { color: var(--rot); }
+:focus-visible { outline: 3px solid var(--rot); outline-offset: 3px; border-radius: 4px; }
+
+.sprung {
+  position: absolute; left: -9999px; top: 0;
+  background: #fff; padding: 0.75rem 1rem; z-index: 10;
+}
+.sprung:focus { left: var(--rand); }
+
+/* ---------------------------------------------------------------- header */
+
+.kopf {
+  padding: 1rem var(--rand) 0.5rem;
+  border-bottom: 3px double var(--rosa-rand);
+  background: rgb(255 255 255 / 0.55);
+}
+.kopf-zeile {
+  max-width: var(--breite);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.logo { display: block; line-height: 0; }
+.logo img { width: min(420px, 100%); height: auto; }
+
+.menue-knopf {
+  display: none;
+  font: inherit;
+  font-weight: bold;
+  color: var(--rot-dunkel);
+  min-height: 48px;
+  padding: 0.5rem 1.1rem;
+  border: 2px solid var(--rosa-rand);
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--rosa-hell), var(--rosa));
+  cursor: pointer;
+}
+.menue-knopf::before { content: "☰ "; }
+.menue-knopf[aria-expanded="true"]::before { content: "✕ "; }
+
+.hauptmenue ul {
+  list-style: none;
+  max-width: var(--breite);
+  margin: 0.75rem auto 0.25rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.hauptmenue a {
+  display: block;
+  min-height: 44px;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--rosa-rand);
+  border-radius: 8px;
+  color: #2a1418;
+  text-decoration: none;
+  background:
+    radial-gradient(circle at 20% 30%, rgb(255 255 255 / 0.7), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgb(255 255 255 / 0.5), transparent 45%),
+    linear-gradient(135deg, var(--rosa-hell), var(--rosa));
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+}
+.hauptmenue a:hover { border-color: var(--rot); color: var(--rot-dunkel); }
+.hauptmenue a[aria-current] {
+  color: #fff;
+  background: var(--rot);
+  border-color: var(--rot-dunkel);
+}
+
+/* ---------------------------------------------------------------- breadcrumbs */
+
+.brotkrumen { max-width: var(--breite); margin: 0 auto; padding: 0.75rem var(--rand) 0; font-size: 1rem; }
+.brotkrumen ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.25rem; }
+.brotkrumen li + li::before { content: "›"; margin-right: 0.25rem; color: var(--text-leise); }
+.brotkrumen [aria-current] { color: var(--text-leise); }
+
+/* ---------------------------------------------------------------- content */
+
+.inhalt {
+  max-width: var(--breite);
+  margin: 0 auto;
+  padding: 1rem var(--rand) 2rem;
+  overflow-wrap: break-word;
+}
+.inhalt p { margin: 1rem 0; }
+.inhalt strong { color: var(--rot-dunkel); }
+.inhalt h1, .inhalt h2, .inhalt h3 { color: var(--rot); line-height: 1.25; }
+
+/* Images keep their natural size but never overflow; images of one old table row sit
+   side by side as long as they fit, and stack on phones. */
+.inhalt img { max-width: 100%; height: auto; vertical-align: middle; margin: 6px; }
+.inhalt img.foto {
+  border: 4px solid #fff;
+  border-radius: 6px;
+  box-shadow: var(--schatten);
+}
+/* A row made only of decorations (stars around a logo, crown bars) shrinks as one line
+   instead of breaking apart on narrow screens. */
+.inhalt p:has(> img.deko + img.deko):not(:has(> img.foto, > a)) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.inhalt p:has(> img.deko + img.deko):not(:has(> img.foto, > a)) > img { min-width: 0; flex: 0 1 auto; }
+.inhalt a:has(> img) { display: inline-block; border-radius: 8px; }
+.inhalt a:has(> img):hover img { box-shadow: 0 0 0 3px var(--rot), var(--schatten); }
+
+.zurueck { margin-top: 2.5rem; }
+.zurueck a {
+  display: inline-block;
+  min-height: 48px;
+  padding: 0.6rem 1.3rem;
+  border: 2px solid var(--rosa-rand);
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--rosa-hell), var(--rosa));
+  color: var(--rot-dunkel);
+  font-weight: bold;
+  text-decoration: none;
+}
+.zurueck a:hover { border-color: var(--rot); }
+
+/* The start page already shows the big logo inside its content. */
+.startseite .logo { display: none; }
+.startseite .kopf-zeile { min-height: 0; }
+
+/* ---------------------------------------------------------------- footer */
+
+.fuss {
+  padding: 1rem var(--rand) 1.5rem;
+  border-top: 3px double var(--rosa-rand);
+  background: rgb(255 255 255 / 0.7);
+  font-size: 0.95rem;
+  color: var(--text-leise);
+}
+.fuss p { margin: 0.5rem 0; }
+.fuss-krone img { max-width: 100%; height: auto; }
+.fuss-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: 1.05rem; }
+.fuss-links a { display: inline-block; padding: 0.4rem 0; }
+
+/* ---------------------------------------------------------------- phones */
+
+@media (max-width: 760px) {
+  body { font-size: 1.1rem; }
+  .kopf-zeile { justify-content: space-between; }
+  .logo img { width: min(260px, 100%); }
+  .startseite .kopf-zeile { justify-content: flex-end; }
+  .js .menue-knopf { display: block; flex: none; }
+  .js .hauptmenue:not(.offen) { display: none; }
+  .hauptmenue ul { flex-direction: column; align-items: stretch; gap: 0.4rem; margin: 0.75rem 0 0.5rem; }
+  .hauptmenue a { padding: 0.7rem 1rem; font-size: 1.15rem; }
+  .inhalt img { margin: 6px 0; }
+  /* Old pages used wide fixed-size tables of text; let long words wrap. */
+  .inhalt { hyphens: auto; }
+}
+
+@media print {
+  .kopf, .brotkrumen, .zurueck, .fuss-links { display: none; }
+  body { background: #fff; }
+}

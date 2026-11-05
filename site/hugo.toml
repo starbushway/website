@@ -1,0 +1,16 @@
+baseURL = "https://starbushway.de/"
+languageCode = "de-DE"
+defaultContentLanguage = "de"
+title = "Starbushway – Maine Coon Zucht in Duisburg"
+disableKinds = ["taxonomy", "term", "RSS"]
+enableRobotsTXT = true
+# Root-relative links ("/bilder/…") are rewritten relative to each page, so the site also
+# works under a sub-path (GitHub Pages before the domain switch, or the editor's preview).
+relativeURLs = true
+
+[params]
+  description = "Starbushway, Maine Coon Zucht Duisburg"
+  webmaster = "Karin Lemanowicz"
+
+[markup.goldmark.renderer]
+  unsafe = false
