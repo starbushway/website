@@ -2,7 +2,7 @@
 // server. Needs `npm run build:main` first (npm test does not build).
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -107,6 +107,29 @@ test('a new page from one PC and an edit from the other both arrive', async () =
   await repo.publish(opts('pc1'), () => {});
   assert.match(published('site/content/katzen/neu/index.md'), /Hallo/);
   assert.match(published(page), /Zeile 1 \(neu\)/);
+});
+
+test('the access key never ends up in the repository', async () => {
+  const token = 'ghp_TESTKEY0000000000000000000000000000';
+  const withToken = (name) => ({ ...opts(name), token });
+  await repo.sync(withToken('pc1'));
+  write('pc1', page, read('pc1', page).replace('Zeile 2', 'Zeile 2 (Schlüsseltest)'));
+  await repo.publish(withToken('pc1'), () => {});
+
+  const remote = join(tmp, 'remote', 'website.git');
+  const objects = execFileSync('git', ['cat-file', '--batch-all-objects', '--batch'], { cwd: remote, maxBuffer: 1 << 26 });
+  assert.ok(!objects.includes(token), 'token in a published object');
+  for (const dir of [join(tmp, 'pc1', '.git'), remote]) {
+    // grep exits with 1 when nothing is found, which is the expected outcome.
+    const grep = spawnSync('grep', ['-rlF', token, dir, '--exclude-dir=objects'], { encoding: 'utf8' });
+    assert.equal(grep.status, 1, `token stored in ${grep.stdout}`);
+  }
+
+  // Pasted into a page by mistake: publishing refuses and names the page.
+  write('pc1', page, read('pc1', page) + `\n${token}\n`);
+  await assert.rejects(repo.publish(withToken('pc1'), () => {}), /Zugangsschlüssel steht in „katzen\/luna\/index\.md“/);
+  assert.doesNotMatch(published(page), new RegExp(token));
+  await repo.discard(withToken('pc1'));
 });
 
 test('discard brings back the published state, removing new files', async () => {

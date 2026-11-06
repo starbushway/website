@@ -86,6 +86,7 @@ export async function publish(o: RepoOptions, onProgress: ProgressFn): Promise<v
   const changed = await changes(o);
   if (!changed.length) return;
   onProgress({ phase: 'Änderungen werden vorbereitet', percent: -1 });
+  refuseIfTokenInside(o, changed);
 
   // Commit locally first, so the edits are safe even if the upload fails halfway.
   const base = await git.resolveRef({ fs, dir: o.dir, ref: o.branch });
@@ -129,6 +130,23 @@ export async function publish(o: RepoOptions, onProgress: ProgressFn): Promise<v
     } catch (e) {
       // Rejected because another PC published in the last seconds: replay again.
       if (attempt >= 3 || !isRejected(e)) throw e;
+    }
+  }
+}
+
+/**
+ * The access key lives only in the app's settings, never in the repository. Should it have
+ * been pasted into a page, nothing is published and the page is named.
+ */
+function refuseIfTokenInside(o: RepoOptions, changed: Change[]): void {
+  if (o.token.length < 8) return;
+  for (const c of changed) {
+    if (c.kind === 'gelöscht') continue;
+    if (fs.readFileSync(path.join(o.dir, c.path)).includes(o.token)) {
+      throw new Error(
+        `Der Zugangsschlüssel steht in „${c.path.replace(/^site\/content\//, '')}“. ` +
+          'Bitte dort entfernen – so wird nichts veröffentlicht.',
+      );
     }
   }
 }
