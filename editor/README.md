@@ -34,6 +34,16 @@ store (Electron `safeStorage`).
 3. On first start enter the editor's name and the access key. The website (~380 MB) is
    downloaded once.
 
+## Mac version (for testing)
+
+```bash
+npm run dist:mac   # → release/Starbushway Editor-<version>-arm64.dmg
+```
+
+Same program with the Mac build of Hugo. It is not code-signed, which is fine on the machine
+that built it. Note that it edits and publishes the real website once set up with the real
+access key.
+
 ## Development
 
 Needs Node 22 and Hugo 0.131.0 extended on PATH.

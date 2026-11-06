@@ -14,8 +14,6 @@ permissions:
 jobs:
   windows:
     runs-on: windows-latest
-    env:
-      HUGO_VERSION: 0.131.0
     defaults:
       run:
         shell: bash
@@ -34,14 +32,7 @@ jobs:
 
       # The same Hugo version that builds the website, so the preview matches it exactly.
       - name: Hugo für die Vorschau holen
-        run: |
-          base="https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}"
-          zip="hugo_extended_${HUGO_VERSION}_windows-amd64.zip"
-          curl -fsSL -o "$RUNNER_TEMP/$zip" "$base/$zip"
-          curl -fsSL -o "$RUNNER_TEMP/checksums.txt" "$base/hugo_${HUGO_VERSION}_checksums.txt"
-          (cd "$RUNNER_TEMP" && grep " $zip\$" checksums.txt | sha256sum -c -)
-          mkdir -p hugo-bin
-          unzip -o "$RUNNER_TEMP/$zip" hugo.exe -d hugo-bin
+        run: bash scripts/fetch-hugo.sh windows
 
       - name: Bauen und testen
         run: |

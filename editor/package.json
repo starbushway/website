@@ -9,7 +9,8 @@
     "start": "npm run build && electron .",
     "dev": "npm run build:main && concurrently -k \"ng serve --port 4300\" \"wait-on http-get://localhost:4300 && cross-env STARBUSH_DEV_URL=http://localhost:4300 electron .\"",
     "test": "node --test test/*.test.mjs",
-    "dist:win": "npm run build && electron-builder --win nsis --x64"
+    "dist:win": "bash scripts/fetch-hugo.sh windows && npm run build && electron-builder --win nsis --x64 --publish never",
+    "dist:mac": "bash scripts/fetch-hugo.sh mac && npm run build && electron-builder --mac dmg --publish never"
   },
   "private": true,
   "packageManager": "npm@10.9.8",
@@ -75,6 +76,15 @@
       "perMachine": false,
       "createDesktopShortcut": "always",
       "shortcutName": "Website bearbeiten"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.png",
+      "category": "public.app-category.productivity",
+      "identity": null
+    },
+    "dmg": {
+      "title": "Starbushway Editor"
     }
   }
 }
