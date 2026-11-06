@@ -5,11 +5,66 @@ aliases:
 alt_url: "Datenschutz.html"
 ---
 
-Diese Website benutzt Google Analytics, einen Webanalysedienst der Google Inc. ("Google"). Google Analytics verwendet sog. "Cookies", Textdateien, die auf Ihrem Computer gespeichert werden und die eine Analyse der Benutzung der Website durch Sie ermöglichen. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieser Website werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert. Im Falle der Aktivierung der IP-Anonymisierung auf dieser Webseite, wird Ihre IP-Adresse von Google jedoch innerhalb von Mitgliedstaaten der Europäischen Union oder in anderen Vertragsstaaten des Abkommens über den Europäischen Wirtschaftsraum zuvor gekürzt. Nur in Ausnahmefällen wird die volle IP-Adresse an einen Server von Google in den USA übertragen und dort gekürzt. Im Auftrag des Betreibers dieser Website wird Google diese Informationen benutzen, um Ihre Nutzung der Website auszuwerten, um Reports über die Websiteaktivitäten zusammenzustellen und um weitere mit der Websitenutzung und der Internetnutzung verbundene Dienstleistungen gegenüber dem Websitebetreiber zu erbringen. Die im Rahmen von Google Analytics von Ihrem Browser übermittelte IP-Adresse wird nicht mit anderen Daten von Google zusammengeführt. Sie können die Speicherung der Cookies durch eine entsprechende Einstellung Ihrer Browser-Software verhindern; wir weisen Sie jedoch darauf hin, dass Sie in diesem Fall gegebenenfalls nicht sämtliche Funktionen dieser Website vollumfänglich werden nutzen können. Sie können darüber hinaus die Erfassung der durch das Cookie erzeugten und auf Ihre Nutzung der Website bezogenen Daten (inkl. Ihrer IP-Adresse) an Google sowie die Verarbeitung dieser Daten durch Google verhindern, indem Sie das unter dem folgenden Link verfügbare Browser-Plugin herunterladen und installieren: http://tools.google.com/dlpage/gaoptout
+## Datenschutzerklärung
 
-Sie können die Erfassung durch Google Analytics verhindern, indem Sie auf folgenden Link klicken.\
-Es wird ein Opt-Out-Cookie gesetzt, der die zukünftige Erfassung Ihrer Daten beim Besuch dieser Website verhindert
+### Verantwortlich
 
-Nähere Informationen zu Nutzungsbedingungen und Datenschutz finden Sie unter den Google Analytics Bedingungen bzw. unter der Google Analytics Übersicht. Wir weisen Sie darauf hin, dass auf dieser Webseite Google Analytics um den Code "gat.\_anonymizeIp();" erweitert wurde, um eine anonymisierte Erfassung von IP-Adressen (sog. IP-Masking) zu gewährleisten.\
-reCAPTCHA\
-Zum Schutz Ihrer Anfragen per Internetformular verwenden wir den Dienst reCAPTCHA des Unternehmens Google Inc. (Google). Die Abfrage dient der Unterscheidung, ob die Eingabe durch einen Menschen oder missbräuchlich durch automatisierte, maschinelle Verarbeitung erfolgt. Die Abfrage schließt den Versand der IP-Adresse und ggf. weiterer von Google für den Dienst reCAPTCHA benötigter Daten an Google ein. Zu diesem Zweck wird Ihre Eingabe an Google übermittelt und dort weiter verwendet. Ihre IP-Adresse wird von Google jedoch innerhalb von Mitgliedstaaten der Europäischen Union oder in anderen Vertragsstaaten des Abkommens über den Europäischen Wirtschaftsraum zuvor gekürzt. Nur in Ausnahmefällen wird die volle IP-Adresse an einen Server von Google in den USA übertragen und dort gekürzt. Im Auftrag des Betreibers dieser Website wird Google diese Informationen benutzen, um Ihre Nutzung dieses Dienstes auszuwerten. Die im Rahmen von reCaptcha von Ihrem Browser übermittelte IP-Adresse wird nicht mit anderen Daten von Google zusammengeführt. Für diese Daten gelten die abweichenden Datenschutzbestimmungen des Unternehmens Google. Weitere Informationen zu den Datenschutzrichtlinien von Google finden Sie unter: https://www.google.com/intl/de/policies/privacy/
+Karin Lemanowicz\
+Geibelstr. 2\
+47057 Duisburg\
+Telefon 0203-359236\
+E-Mail: [maboni83@gmx.de](mailto:maboni83@gmx.de)
+
+### Das Wichtigste in Kürze
+
+Diese Website ist eine reine Informationsseite. Wir setzen **keine Cookies**, verwenden
+**keine Analyse- oder Statistikdienste** (auch kein Google Analytics), haben **kein
+Kontaktformular** und binden **keine Inhalte fremder Anbieter** ein (keine Schriftarten,
+Videos, Karten oder „Gefällt mir“-Knöpfe). Wir selbst erheben beim Besuch der Seiten keine
+persönlichen Daten.
+
+### Hosting bei GitHub
+
+Diese Website wird über den Dienst „GitHub Pages“ bereitgestellt. Anbieter ist die
+GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA.
+
+Wenn Sie eine Seite aufrufen, verarbeitet GitHub technisch notwendige Daten, damit die Seite
+an Ihren Browser ausgeliefert werden kann, und speichert sie zum Schutz vor Missbrauch und
+Angriffen vorübergehend in Protokolldateien. Dazu gehören insbesondere Ihre IP-Adresse,
+Datum und Uhrzeit des Abrufs, die aufgerufene Adresse, die Seite, von der Sie kamen, sowie
+Angaben zu Browser und Betriebssystem. Wir selbst haben keinen Zugriff auf diese Daten und
+führen sie nicht mit anderen Daten zusammen.
+
+Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse liegt in einer
+sicheren, zuverlässigen und kostengünstigen Bereitstellung dieser Website.
+
+Dabei können Daten in die USA übertragen werden. GitHub ist als Tochtergesellschaft der
+Microsoft Corporation nach dem EU-US-Datenschutzrahmen (EU-U.S. Data Privacy Framework)
+zertifiziert; für die USA besteht insoweit ein Angemessenheitsbeschluss der EU-Kommission.
+Weitere Informationen finden Sie in der Datenschutzerklärung von GitHub:
+https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement
+
+### Kontakt per E-Mail oder Telefon
+
+Wenn Sie uns per E-Mail oder Telefon kontaktieren, verwenden wir Ihre Angaben nur, um Ihre
+Anfrage zu beantworten (Art. 6 Abs. 1 lit. b bzw. f DSGVO). Wir geben sie nicht weiter und
+löschen sie, wenn sie nicht mehr benötigt werden.
+
+### Links zu anderen Websites
+
+Diese Website enthält Links zu anderen Websites, zum Beispiel zu Facebook oder zu
+Zuchtvereinen. Erst wenn Sie einen solchen Link anklicken, verlassen Sie unsere Seite; dann
+gilt die Datenschutzerklärung des jeweiligen Anbieters.
+
+### Ihre Rechte
+
+Sie haben das Recht auf Auskunft über Ihre bei uns gespeicherten Daten sowie auf
+Berichtigung, Löschung und Einschränkung der Verarbeitung, auf Datenübertragbarkeit und auf
+Widerspruch gegen die Verarbeitung (Art. 15 bis 21 DSGVO). Wenden Sie sich dazu einfach an
+die oben genannte Adresse.
+
+Außerdem können Sie sich bei einer Datenschutz-Aufsichtsbehörde beschweren. Für uns
+zuständig ist die Landesbeauftragte für Datenschutz und Informationsfreiheit
+Nordrhein-Westfalen, Kavalleriestraße 2–4, 40213 Düsseldorf, https://www.ldi.nrw.de
+
+Stand: November 2026

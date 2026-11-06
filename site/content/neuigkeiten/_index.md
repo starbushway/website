@@ -79,7 +79,7 @@ Somit wäre dann unsere Pause beendet und ich hoffe im November wieder meine Sta
 
 Heute ist sein Geburtstag Unser "Ouzo".
 
-![��](https://static.xx.fbcdn.net/images/emoji.php/v9/t98/1/16/1f49e.png)
+💞
 
 Er ist heute 8 Jahre alt und immer noch Deckkater hier bei uns. Zuverlässiger Decker, lieb mit den Mädels und zärtlich und verspielt mit den Kitten. Ein Schoßkater. Vater, Großvater Ur Ur.....unzähliger toller und schöner Babys. Bis 7 Jahre HCM geschallt mit Bestwerten. Wir arbeiten an einem würdigen Nachfolger, denn in Kürze wird er kastriert
 

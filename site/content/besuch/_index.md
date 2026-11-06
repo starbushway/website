@@ -26,7 +26,7 @@ Boden krabbelt ist bei uns völlig normal
 
 Dorothea hat sich den schwarzen Schatz bei Geburt reserviert und geduldig bis zur Abgabe gewartet. Heute hat sie ihn abgeholt. Zwei Starbushway Mädels warten schon auf ihn
 
-![��](https://static.xx.fbcdn.net/images/emoji.php/v9/tfc/1/16/1f44d.png)
+👍
 
 ![](evbes.jpg)
 ![](evbes1.jpg)

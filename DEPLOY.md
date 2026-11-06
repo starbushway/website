@@ -55,8 +55,8 @@ certificate automatically.
 - Check: https://starbushway.de, https://www.starbushway.de, and an old link such as
   https://starbushway.de/zuchtluna.html (it should redirect to `/katzen/zuchtluna/`).
 - Cancel the old webspace only after checking that no mailboxes depend on it.
-- Update the Datenschutz page: it must name GitHub (GitHub Inc., USA) as the hosting provider
-  that processes visitors' IP addresses. I have not changed this page's text.
+- The Datenschutz page already names GitHub as hosting provider (done 2026-11-06). If the site
+  ever moves to another host, or adds a form, statistics or embedded videos, update it.
 
 ## Note on hosting terms
 
