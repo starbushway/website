@@ -9,3 +9,12 @@ site/resources/_gen/
 site/.hugo_build.lock
 
 .DS_Store
+
+# Editor app build output and downloads
+editor/node_modules/
+editor/.angular/
+editor/dist/
+editor/dist-electron/
+editor/release/
+editor/hugo-bin/
+editor/.vscode/

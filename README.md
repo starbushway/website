@@ -8,6 +8,8 @@ as a static [Hugo](https://gohugo.io) site.
 | `site/` | The Hugo site: `content/` (one folder per page, Markdown + photos), `layouts/` and `assets/` (theme), `static/` (shared images) |
 | `migration/` | One-time scripts that converted the old site; `report.md` lists what needs a human look |
 | `.github/workflows/deploy.yml` | Builds the site and publishes it to GitHub Pages on every push to `main` |
+| `editor/` | Windows program for the editors (Electron + Angular), see [editor/README.md](editor/README.md) |
+| `.github/workflows/editor.yml` | Builds the editor's Windows installer |
 
 ## Local preview
 

@@ -4,6 +4,8 @@ name: Website veröffentlichen
 on:
   push:
     branches: [main]
+    # Changes to the editor app alone do not change the website.
+    paths-ignore: ['editor/**', '.github/workflows/editor.yml']
   workflow_dispatch:
 
 permissions:

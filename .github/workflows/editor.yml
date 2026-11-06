@@ -1,0 +1,63 @@
+# Builds the Windows installer of the editor app ("Starbushway Editor Setup x.y.z.exe").
+# Run it by hand (Actions → "Editor-Programm bauen" → Run workflow) or push a tag such as
+# editor-v0.1.0, which also attaches the installer to a GitHub release.
+name: Editor-Programm bauen
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['editor-v*']
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    env:
+      HUGO_VERSION: 0.131.0
+    defaults:
+      run:
+        shell: bash
+        working-directory: editor
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: editor/package-lock.json
+
+      - name: Abhängigkeiten installieren
+        run: npm ci
+
+      # The same Hugo version that builds the website, so the preview matches it exactly.
+      - name: Hugo für die Vorschau holen
+        run: |
+          base="https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}"
+          zip="hugo_extended_${HUGO_VERSION}_windows-amd64.zip"
+          curl -fsSL -o "$RUNNER_TEMP/$zip" "$base/$zip"
+          curl -fsSL -o "$RUNNER_TEMP/checksums.txt" "$base/hugo_${HUGO_VERSION}_checksums.txt"
+          (cd "$RUNNER_TEMP" && grep " $zip\$" checksums.txt | sha256sum -c -)
+          mkdir -p hugo-bin
+          unzip -o "$RUNNER_TEMP/$zip" hugo.exe -d hugo-bin
+
+      - name: Bauen und testen
+        run: |
+          npm run build
+          npm test
+
+      - name: Installationsprogramm erstellen
+        run: npx electron-builder --win nsis --x64 --publish never
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Starbushway-Editor-Windows
+          path: editor/release/*.exe
+
+      - name: Release anlegen
+        if: startsWith(github.ref, 'refs/tags/editor-v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" release/*.exe --title "Starbushway Editor ${GITHUB_REF_NAME#editor-v}" --notes "Installationsprogramm für Windows."

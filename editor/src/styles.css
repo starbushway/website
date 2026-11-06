@@ -1,0 +1,211 @@
+/* Starbushway editor: large type, big targets, clear contrast – made for occasional,
+   not tech-savvy users. Colours follow the website (dark red, pink). */
+:root {
+  --rot: #990000;
+  --rot-dunkel: #6e0000;
+  --rosa-hell: #fdf0f4;
+  --rosa: #f3c6d4;
+  --rosa-rand: #d28ea4;
+  --grau: #555;
+  --linie: #e2c9d1;
+  --gruen: #1d6b2f;
+  --flaeche: #fff;
+  --hinter: #fdf6f8;
+  font-size: 19px;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  color: #1b1b1b;
+  background: var(--hinter);
+}
+h1 { color: var(--rot); font-size: 1.8rem; margin: 0 0 1rem; }
+.gross { font-size: 1.15rem; }
+.hilfe { display: block; color: var(--grau); font-size: 0.9rem; font-weight: normal; }
+.unsichtbar { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+:focus-visible { outline: 3px solid var(--rot); outline-offset: 2px; }
+
+/* ---------------------------------------------------------------- controls */
+
+button {
+  font: inherit;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  border: 2px solid var(--rosa-rand);
+  background: #fff;
+  color: #222;
+}
+button:hover:not(:disabled) { border-color: var(--rot); }
+button:disabled { opacity: 0.45; cursor: default; }
+button.haupt {
+  background: var(--rot);
+  border-color: var(--rot-dunkel);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.5rem 1.4rem;
+}
+button.haupt:hover:not(:disabled) { background: var(--rot-dunkel); }
+button.neben { background: var(--rosa-hell); }
+button.klein { min-height: 38px; padding: 0.2rem 0.8rem; }
+button.loeschen:hover:not(:disabled) { background: #fde2e2; }
+
+label { display: block; font-weight: 600; margin-bottom: 1rem; }
+input:not([type="file"]) {
+  display: block;
+  width: 100%;
+  margin-top: 0.3rem;
+  font: inherit;
+  font-weight: normal;
+  padding: 0.55rem 0.7rem;
+  border: 2px solid var(--linie);
+  border-radius: 8px;
+  background: #fff;
+}
+input:focus { border-color: var(--rot); outline: none; }
+
+/* ---------------------------------------------------------------- setup */
+
+.setup { max-width: 640px; margin: 8vh auto; padding: 2rem; background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgb(0 0 0 / 0.08); }
+.setup details { margin: 0 0 1.5rem; color: var(--grau); }
+.setup summary { cursor: pointer; margin-bottom: 0.8rem; }
+
+/* ---------------------------------------------------------------- frame */
+
+app-workspace { display: flex; flex-direction: column; height: 100vh; }
+
+.leiste {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 1.2rem;
+  background: #fff;
+  border-bottom: 3px double var(--rosa-rand);
+}
+.leiste-titel { font-weight: 700; color: var(--rot); font-size: 1.15rem; }
+.leiste-status { margin-left: auto; color: var(--grau); }
+.leiste-status strong { color: var(--rot); }
+
+.arbeitsflaeche { flex: 1; display: flex; min-height: 0; }
+
+.seitenliste {
+  width: 320px;
+  flex: none;
+  overflow-y: auto;
+  padding: 1rem;
+  background: #fff;
+  border-right: 1px solid var(--linie);
+}
+.seitenliste ul { list-style: none; margin: 0; padding: 0; }
+.seitenliste ul ul { margin: 0.2rem 0 0.6rem 0.8rem; padding-left: 0.6rem; border-left: 3px solid var(--rosa); }
+.seitenliste li button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-radius: 6px;
+  margin: 2px 0;
+  min-height: 40px;
+}
+.seitenliste button.bereich { font-weight: 600; }
+.seitenliste button.unterseite { font-size: 0.95rem; }
+.seitenliste button:hover { background: var(--rosa-hell); }
+.seitenliste button.aktiv { background: var(--rot); color: #fff; }
+.seitenliste button.neu { color: var(--gruen); font-size: 0.95rem; }
+.suche { margin-bottom: 0.8rem; }
+.neue-seite { padding: 0.6rem; background: var(--rosa-hell); border-radius: 8px; }
+.neue-seite label { font-size: 0.95rem; margin-bottom: 0.5rem; }
+.knoepfe { display: flex; gap: 0.5rem; }
+
+.inhaltbereich { flex: 1; overflow-y: auto; display: flex; flex-direction: column; min-width: 0; }
+.willkommen { max-width: 720px; margin: 10vh auto; padding: 0 2rem; }
+
+.ansicht-wahl { display: flex; gap: 0.5rem; padding: 1rem 2rem 0; position: sticky; top: 0; background: var(--hinter); z-index: 2; }
+.ansicht-wahl button { border-radius: 8px 8px 0 0; border-bottom: none; min-width: 10rem; font-weight: 600; }
+.ansicht-wahl button[aria-selected="true"] { background: #fff; border-color: var(--rot); color: var(--rot); }
+
+.vorschau { flex: 1; width: 100%; border: none; border-top: 2px solid var(--rot); background: #fff; min-height: 600px; }
+
+/* ---------------------------------------------------------------- page editor */
+
+.editor { background: #fff; border-top: 2px solid var(--rot); padding: 1.5rem 2rem 4rem; flex: 1; }
+.editor-kopf { display: flex; align-items: end; gap: 1rem; margin-bottom: 0.5rem; }
+.titel-feld { flex: 1; margin: 0; }
+.titel-feld input { font-size: 1.3rem; font-weight: 600; color: var(--rot); }
+.speicherstand { color: var(--gruen); min-width: 9rem; padding-bottom: 0.7rem; }
+
+.block {
+  position: relative;
+  border: 2px solid var(--linie);
+  border-radius: 10px;
+  padding: 0.8rem 4.2rem 0.8rem 0.8rem;
+  background: #fff;
+}
+.block:focus-within, .block:hover { border-color: var(--rosa-rand); }
+.block-knoepfe { position: absolute; top: 0.5rem; right: 0.5rem; display: flex; flex-direction: column; gap: 4px; }
+.block-knoepfe button { min-height: 36px; width: 3rem; padding: 0; }
+
+.einfuegen { display: flex; justify-content: center; gap: 0.5rem; padding: 0.35rem 0; opacity: 0.35; transition: opacity 0.15s; }
+.einfuegen:hover, .einfuegen:focus-within { opacity: 1; }
+.einfuegen button { min-height: 36px; border-style: dashed; color: var(--gruen); }
+
+.text-werkzeuge { display: flex; gap: 0.4rem; margin-bottom: 0.5rem; }
+.text-werkzeuge button { min-height: 36px; padding: 0.1rem 0.7rem; font-size: 0.9rem; }
+.textfeld {
+  min-height: 3rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  background: var(--rosa-hell);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.05rem;
+  outline: none;
+}
+.textfeld:focus { background: #fff; box-shadow: inset 0 0 0 2px var(--rosa-rand); }
+.textfeld p { margin: 0 0 0.6rem; }
+.textfeld p:last-child { margin-bottom: 0; }
+.textfeld strong { color: var(--rot-dunkel); }
+.textfeld img { max-height: 120px; vertical-align: middle; }
+.link-eingabe { display: flex; align-items: end; gap: 0.5rem; margin-bottom: 0.5rem; }
+.link-eingabe label { flex: 1; margin: 0; }
+
+.fotoreihe { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: flex-start; }
+.foto { margin: 0; width: 180px; text-align: center; }
+.foto img { width: 180px; height: 140px; object-fit: contain; background: #f6eef1; border-radius: 6px; display: block; }
+.foto figcaption { font-size: 0.8rem; color: var(--grau); }
+.foto-knoepfe { display: flex; justify-content: center; gap: 4px; margin-top: 4px; }
+.foto-knoepfe button { min-height: 36px; padding: 0 0.6rem; }
+.foto-hinzu {
+  width: 180px;
+  height: 140px;
+  border: 3px dashed var(--rosa-rand);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--gruen);
+  cursor: pointer;
+  margin: 0;
+}
+.foto-hinzu:hover { border-color: var(--rot); background: var(--rosa-hell); }
+.foto-hinzu input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+
+/* ---------------------------------------------------------------- overlay & messages */
+
+.warten { position: fixed; inset: 0; background: rgb(255 255 255 / 0.75); display: grid; place-items: center; z-index: 50; }
+.warten-box { background: #fff; padding: 2rem 3rem; border-radius: 16px; box-shadow: 0 6px 30px rgb(0 0 0 / 0.15); text-align: center; min-width: 360px; font-size: 1.15rem; }
+.warten-box progress { width: 100%; height: 1rem; }
+.kreisel { width: 48px; height: 48px; margin: 0 auto 0.5rem; border: 5px solid var(--rosa); border-top-color: var(--rot); border-radius: 50%; animation: drehen 1s linear infinite; }
+@keyframes drehen { to { transform: rotate(360deg); } }
+
+.meldungen { position: fixed; bottom: 1rem; right: 1rem; display: flex; flex-direction: column; gap: 0.5rem; z-index: 60; max-width: 520px; }
+.meldung { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 0.8rem 0.8rem 1.2rem; border-radius: 10px; background: #eaf6ec; border: 2px solid var(--gruen); box-shadow: 0 3px 12px rgb(0 0 0 / 0.12); }
+.meldung.fehler { background: #fdecec; border-color: var(--rot); }
+.meldung span { flex: 1; }
+.meldung button { border: none; background: transparent; min-height: 36px; }

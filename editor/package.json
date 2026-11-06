@@ -1,0 +1,80 @@
+{
+  "name": "starbushway-editor",
+  "version": "0.1.0",
+  "scripts": {
+    "ng": "ng",
+    "build:ui": "ng build --base-href ./",
+    "build:main": "tsc -p electron/tsconfig.json",
+    "build": "npm run build:ui && npm run build:main",
+    "start": "npm run build && electron .",
+    "dev": "npm run build:main && concurrently -k \"ng serve --port 4300\" \"wait-on http-get://localhost:4300 && cross-env STARBUSH_DEV_URL=http://localhost:4300 electron .\"",
+    "test": "node --test test/*.test.mjs",
+    "dist:win": "npm run build && electron-builder --win nsis --x64"
+  },
+  "private": true,
+  "packageManager": "npm@10.9.8",
+  "dependencies": {
+    "@angular/common": "^22.1.0",
+    "@angular/compiler": "^22.1.0",
+    "@angular/core": "^22.1.0",
+    "@angular/forms": "^22.1.0",
+    "@angular/platform-browser": "^22.1.0",
+    "@angular/router": "^22.1.0",
+    "gray-matter": "^4.0.3",
+    "isomorphic-git": "^1.44.11",
+    "marked": "^16.4.2",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "turndown": "^7.2.5"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.1.5",
+    "@angular/cli": "^22.1.5",
+    "@angular/compiler-cli": "^22.1.0",
+    "@types/turndown": "^5.0.6",
+    "concurrently": "^10.0.6",
+    "cross-env": "^10.1.0",
+    "electron": "^45.2.3",
+    "electron-builder": "^26.18.0",
+    "esbuild": "^0.28.2",
+    "playwright-core": "^1.65.0",
+    "prettier": "^3.8.1",
+    "typescript": "~6.0.2",
+    "wait-on": "^9.5.1"
+  },
+  "productName": "Starbushway Editor",
+  "description": "Programm zum Bearbeiten der Website starbushway.de",
+  "author": "Starbushway",
+  "main": "dist-electron/electron/main.js",
+  "build": {
+    "appId": "de.starbushway.editor",
+    "productName": "Starbushway Editor",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist-electron/**",
+      "dist/editor/browser/**",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "hugo-bin",
+        "to": "hugo",
+        "filter": [
+          "hugo*"
+        ]
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": "always",
+      "shortcutName": "Website bearbeiten"
+    }
+  }
+}
