@@ -257,7 +257,8 @@ app-workspace { display: flex; flex-direction: column; height: 100vh; }
 .bb-e, .bb-w { top: calc(50% - 20px); width: 12px; height: 40px; cursor: ew-resize; }
 .bb-e { right: -7px; } .bb-w { left: -7px; }
 
-.bb-leiste { width: 360px; flex: none; overflow-y: auto; background: #fff; color: #1b1b1b; padding: 1rem 1.2rem; display: flex; flex-direction: column; }
+.bb-leiste { width: 360px; flex: none; background: #fff; color: #1b1b1b; padding: 1rem 1.2rem; display: flex; flex-direction: column; min-height: 0; }
+.bb-scroll { flex: 1; overflow-y: auto; min-height: 0; padding-right: 0.3rem; }
 .bb-leiste h3 { color: var(--rot); font-size: 1rem; margin: 1rem 0 0.3rem; border-bottom: 1px solid var(--linie); padding-bottom: 0.2rem; }
 .bb-tabs { padding: 0; position: static; background: none; }
 .bb-tabs button { flex: 1; min-width: 0; border-radius: 8px; border-bottom: 2px solid var(--rosa-rand); }
@@ -270,6 +271,6 @@ app-workspace { display: flex; flex-direction: column; height: 100vh; }
 .bb-wahl { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .bb-wahl button { min-height: 38px; padding: 0.2rem 0.7rem; font-size: 0.95rem; }
 .bb-wahl button.aktiv { background: var(--rot); color: #fff; border-color: var(--rot-dunkel); }
-.bb-ende { margin-top: auto; padding-top: 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.bb-ende { border-top: 1px solid var(--linie); padding-top: 0.9rem; margin-top: 0.6rem; display: flex; flex-direction: column; gap: 0.6rem; }
 .bb-ende .knoepfe { justify-content: space-between; }
 .bb-ende .knoepfe button { flex: 1; }

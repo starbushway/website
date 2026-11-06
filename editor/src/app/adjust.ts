@@ -128,7 +128,7 @@ export function autoAdjust(img: ImageData): Adjustments {
   };
   const low = pct(0.005), mid = pct(0.5), high = pct(0.995);
   const belichtung = Math.max(-1, Math.min(1, Math.log2(0.98 / Math.max(high, 0.2))));
-  const schwarzpunkt = Math.max(0, Math.min(40, Math.round(low * 400)));
+  const schwarzpunkt = Math.max(0, Math.min(20, Math.round(low * 200)));
   const helligkeit = Math.max(-40, Math.min(40, Math.round((0.45 - mid * Math.pow(2, belichtung)) * 120)));
   return {
     ...NEUTRAL,

@@ -63,6 +63,7 @@ const OUTPUT_MAX = 1600;
           <button type="button" role="tab" [attr.aria-selected]="tab() === 'zuschneiden'" (click)="tab.set('zuschneiden'); redraw()">Zuschneiden</button>
         </div>
 
+        <div class="bb-scroll">
         @if (tab() === 'anpassen') {
           <div class="bb-knopfzeile">
             <button type="button" class="neben" (click)="auto()">✨ Automatisch</button>
@@ -99,6 +100,7 @@ const OUTPUT_MAX = 1600;
           </label>
           <p class="hilfe">Ziehen Sie am Rahmen oder an seinen Ecken, um den Ausschnitt zu wählen.</p>
         }
+        </div>
 
         <div class="bb-ende">
           <button type="button" class="neben" (click)="resetAll()" [disabled]="!changed()">Alles zurücksetzen</button>

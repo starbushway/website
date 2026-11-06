@@ -16,7 +16,7 @@ const RENDERER_DIR = path.join(__dirname, '..', '..', 'dist', 'editor', 'browser
 // app:// serves the built UI; seite:// shows the website's photos inside the editor.
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { standard: true, secure: true, supportFetchAPI: true } },
-  { scheme: 'seite', privileges: { standard: true, secure: true, supportFetchAPI: true } },
+  { scheme: 'seite', privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true } },
 ]);
 
 let window: BrowserWindow | null = null;
@@ -96,10 +96,16 @@ function serveFiles() {
     return net.fetch(pathToFileURL(safe).toString());
   });
   // seite://site/katzen/zuchtluna/luna.jpg, seite://site/bilder/royaltybar.gif
-  protocol.handle('seite', (request) => {
+  protocol.handle('seite', async (request) => {
     const url = new URL(request.url);
     const file = content().resolveAsset(decodeURIComponent(url.pathname).replace(/^\/+/, ''));
-    return file ? net.fetch(pathToFileURL(file).toString()) : new Response('Nicht gefunden', { status: 404 });
+    if (!file) return new Response('Nicht gefunden', { status: 404 });
+    // The image editor reads the pixels, which needs CORS from the app's own pages.
+    const response = await net.fetch(pathToFileURL(file).toString());
+    const headers = new Headers(response.headers);
+    headers.set('Access-Control-Allow-Origin', DEV_URL ? new URL(DEV_URL).origin : 'app://editor');
+    headers.set('Cache-Control', 'no-store');
+    return new Response(response.body, { status: response.status, headers });
   });
 }
 
