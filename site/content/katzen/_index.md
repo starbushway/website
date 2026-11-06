@@ -113,6 +113,7 @@ Cajana of Dantes Peak\
 **blue silver tabby cl**
 
 [![](cajhei1a.jpg)](/katzen/zuchtkati/)
+![](img-1653.jpg)
 
 Sie ist mit einem Jahr HCM/PKD negativ geschallt.\
 Laboklin Gentest:\
