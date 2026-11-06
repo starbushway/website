@@ -12,6 +12,8 @@ const api: StarbushApi = {
   savePage: call('savePage') as StarbushApi['savePage'],
   addImage: call('addImage') as StarbushApi['addImage'],
   createPage: call('createPage') as StarbushApi['createPage'],
+  linkingPages: call('linkingPages') as StarbushApi['linkingPages'],
+  deletePage: call('deletePage') as StarbushApi['deletePage'],
   changes: call('changes') as StarbushApi['changes'],
   publish: call('publish') as StarbushApi['publish'],
   discard: call('discard') as StarbushApi['discard'],

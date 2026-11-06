@@ -209,3 +209,67 @@ app-workspace { display: flex; flex-direction: column; height: 100vh; }
 .meldung.fehler { background: #fdecec; border-color: var(--rot); }
 .meldung span { flex: 1; }
 .meldung button { border: none; background: transparent; min-height: 36px; }
+
+/* ---------------------------------------------------------------- dialogs */
+
+.dialog { background: #fff; padding: 1.8rem 2.2rem; border-radius: 16px; box-shadow: 0 6px 30px rgb(0 0 0 / 0.18); max-width: 620px; }
+.dialog h2 { color: var(--rot); margin: 0 0 0.8rem; font-size: 1.4rem; }
+.dialog ul { margin: 0 0 1rem; padding-left: 1.4rem; max-height: 30vh; overflow-y: auto; }
+.dialog .knoepfe { justify-content: flex-end; margin-top: 1.2rem; }
+.editor-kopf .loeschen { color: var(--rot); }
+
+/* ---------------------------------------------------------------- photo size */
+
+.foto-groesse { margin: 4px 0 0; font-weight: normal; }
+.foto-groesse select {
+  width: 100%;
+  font: inherit;
+  font-size: 0.9rem;
+  min-height: 36px;
+  padding: 0 0.4rem;
+  border: 2px solid var(--linie);
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* ---------------------------------------------------------------- image editor */
+
+.bildbearbeitung { position: fixed; inset: 0; z-index: 40; display: flex; background: #1f1a1c; color: #fff; }
+.bb-bild { position: relative; flex: 1; overflow: hidden; user-select: none; }
+.bb-bild canvas { position: absolute; box-shadow: 0 4px 30px rgb(0 0 0 / 0.5); }
+.bb-hinweis { position: absolute; top: 1rem; left: 1rem; background: rgb(0 0 0 / 0.6); padding: 0.3rem 0.8rem; border-radius: 6px; }
+.bb-rahmen { position: absolute; border: 2px solid #fff; box-shadow: 0 0 0 9999px rgb(0 0 0 / 0.55); cursor: move; touch-action: none; }
+.bb-raster {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(to right, transparent calc(33.33% - 0.5px), rgb(255 255 255 / 0.5) 33.33%, transparent calc(33.33% + 0.5px),
+      transparent calc(66.66% - 0.5px), rgb(255 255 255 / 0.5) 66.66%, transparent calc(66.66% + 0.5px)),
+    linear-gradient(to bottom, transparent calc(33.33% - 0.5px), rgb(255 255 255 / 0.5) 33.33%, transparent calc(33.33% + 0.5px),
+      transparent calc(66.66% - 0.5px), rgb(255 255 255 / 0.5) 66.66%, transparent calc(66.66% + 0.5px));
+}
+.bb-griff { position: absolute; width: 26px; height: 26px; background: #fff; border-radius: 4px; touch-action: none; }
+.bb-nw { left: -13px; top: -13px; cursor: nwse-resize; }
+.bb-ne { right: -13px; top: -13px; cursor: nesw-resize; }
+.bb-sw { left: -13px; bottom: -13px; cursor: nesw-resize; }
+.bb-se { right: -13px; bottom: -13px; cursor: nwse-resize; }
+.bb-n, .bb-s { left: calc(50% - 20px); width: 40px; height: 12px; cursor: ns-resize; }
+.bb-n { top: -7px; } .bb-s { bottom: -7px; }
+.bb-e, .bb-w { top: calc(50% - 20px); width: 12px; height: 40px; cursor: ew-resize; }
+.bb-e { right: -7px; } .bb-w { left: -7px; }
+
+.bb-leiste { width: 360px; flex: none; overflow-y: auto; background: #fff; color: #1b1b1b; padding: 1rem 1.2rem; display: flex; flex-direction: column; }
+.bb-leiste h3 { color: var(--rot); font-size: 1rem; margin: 1rem 0 0.3rem; border-bottom: 1px solid var(--linie); padding-bottom: 0.2rem; }
+.bb-tabs { padding: 0; position: static; background: none; }
+.bb-tabs button { flex: 1; min-width: 0; border-radius: 8px; border-bottom: 2px solid var(--rosa-rand); }
+.bb-knopfzeile { display: flex; gap: 0.5rem; margin-top: 0.8rem; }
+.bb-knopfzeile button { flex: 1; padding: 0.3rem 0.5rem; }
+.bb-regler { margin: 0.35rem 0; font-weight: normal; }
+.bb-regler span { display: flex; justify-content: space-between; font-size: 0.95rem; }
+.bb-regler output { color: var(--grau); font-variant-numeric: tabular-nums; }
+.bb-regler input[type="range"] { width: 100%; accent-color: var(--rot); margin: 0.2rem 0 0; }
+.bb-wahl { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.bb-wahl button { min-height: 38px; padding: 0.2rem 0.7rem; font-size: 0.95rem; }
+.bb-wahl button.aktiv { background: var(--rot); color: #fff; border-color: var(--rot-dunkel); }
+.bb-ende { margin-top: auto; padding-top: 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.bb-ende .knoepfe { justify-content: space-between; }
+.bb-ende .knoepfe button { flex: 1; }

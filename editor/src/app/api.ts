@@ -63,6 +63,10 @@ export interface StarbushApi {
   /** Saves an already resized image into the page's folder; returns the file name used. */
   addImage(dir: string, name: string, data: ArrayBuffer): Promise<string>;
   createPage(sectionDir: string, title: string): Promise<string>;
+  /** Pages that link to the page or show its photos. */
+  linkingPages(dir: string): Promise<PageInfo[]>;
+  /** Deletes the page and its photos; returns the pages whose links to it were removed. */
+  deletePage(dir: string): Promise<PageInfo[]>;
   changes(): Promise<Change[]>;
   publish(): Promise<void>;
   discard(): Promise<void>;

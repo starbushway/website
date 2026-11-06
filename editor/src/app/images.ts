@@ -1,6 +1,7 @@
 // New photos are made web-sized before they are saved: the longest side becomes at most
-// 800 px, like the existing photos. Re-encoding also drops camera data such as GPS position.
-const MAX_SIDE = 800;
+// 1600 px, enough for "Volle Breite" on sharp screens; how large a photo appears on the
+// page is chosen separately. Re-encoding also drops camera data such as GPS position.
+const MAX_SIDE = 1600;
 
 export interface PreparedImage {
   name: string;

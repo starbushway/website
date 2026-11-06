@@ -4,11 +4,23 @@
 import { Marked } from 'marked';
 import TurndownService from 'turndown';
 
+/** Display size on the website; none = the file's own size (all migrated photos). */
+export type PhotoSize = 'klein' | 'mittel' | 'gross' | 'voll';
+export const PHOTO_SIZES: { value: PhotoSize | undefined; label: string }[] = [
+  { value: undefined, label: 'Original' },
+  { value: 'klein', label: 'Klein' },
+  { value: 'mittel', label: 'Mittel' },
+  { value: 'gross', label: 'Groß' },
+  { value: 'voll', label: 'Volle Breite' },
+];
+
 export interface Photo {
   src: string;
   alt: string;
   /** Page or larger image the photo links to. */
   href?: string;
+  /** Stored as the Markdown image title, read by the site's render-image hook. */
+  size?: PhotoSize;
 }
 
 export type Block =
@@ -19,7 +31,13 @@ export type Block =
 let nextId = 1;
 export const newId = () => nextId++;
 
-const PHOTO = /\[!\[([^\]]*)\]\(([^)\s]+)\)\]\(([^)\s]+)\)|!\[([^\]]*)\]\(([^)\s]+)\)/g;
+const TITLE = '(?:\\s+"([^"]*)")?';
+const PHOTO = new RegExp(
+  `\\[!\\[([^\\]]*)\\]\\(([^)\\s]+)${TITLE}\\)\\]\\(([^)\\s]+)\\)|!\\[([^\\]]*)\\]\\(([^)\\s]+)${TITLE}\\)`,
+  'g',
+);
+const asSize = (t: string | undefined) =>
+  PHOTO_SIZES.some((s) => s.value && s.value === t) ? (t as PhotoSize) : undefined;
 
 export function parseBody(body: string): Block[] {
   return body
@@ -29,9 +47,11 @@ export function parseBody(body: string): Block[] {
     .map((p): Block => {
       const rest = p.replace(PHOTO, '').replace(/[\s\\]/g, '');
       if (rest) return { id: newId(), kind: 'text', md: p };
-      const photos = [...p.matchAll(PHOTO)].map((m) =>
-        m[2] ? { alt: m[1]!, src: m[2], href: m[3] } : { alt: m[4]!, src: m[5]! },
-      );
+      const photos = [...p.matchAll(PHOTO)].map((m): Photo => {
+        const photo: Photo = m[2] ? { alt: m[1]!, src: m[2], href: m[4] } : { alt: m[5]!, src: m[6]! };
+        const size = asSize(m[2] ? m[3] : m[7]);
+        return size ? { ...photo, size } : photo;
+      });
       return { id: newId(), kind: 'photos', photos, raw: p };
     });
 }
@@ -44,7 +64,7 @@ export function serializeBody(blocks: Block[]): string {
 }
 
 const photoMd = (p: Photo) => {
-  const img = `![${p.alt}](${p.src})`;
+  const img = `![${p.alt}](${p.src}${p.size ? ` "${p.size}"` : ''})`;
   return p.href ? `[${img}](${p.href})` : img;
 };
 

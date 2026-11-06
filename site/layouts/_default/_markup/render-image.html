@@ -1,11 +1,18 @@
-{{- /* Photos (JPEG) get a frame; small GIF/PNG decorations stay plain. */ -}}
+{{- /* Photos (JPEG) get a frame; small GIF/PNG decorations stay plain.
+       The editor stores a display size as the image title: klein, mittel, gross or voll.
+       Without one, the picture keeps its own size (all migrated photos). */ -}}
 {{- $img := .Page.Resources.Get .Destination -}}
 {{- if not $img }}{{ $img = resources.Get (strings.TrimPrefix "/" .Destination) }}{{ end -}}
 {{- $alt := .Text -}}
+{{- $widths := dict "klein" 220 "mittel" 400 "gross" 640 -}}
 {{- if and $img (in (slice "jpeg" "png" "gif") $img.MediaType.SubType) -}}
   {{- $class := cond (and (eq $img.MediaType.SubType "jpeg") (ge $img.Width 250)) "foto" "deko" -}}
   {{- if and (not $alt) (eq $class "foto") }}{{ $alt = printf "Foto: %s" .Page.LinkTitle }}{{ end -}}
-  <img class="{{ $class }}" src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+  {{- $w := $img.Width -}}
+  {{- $h := $img.Height -}}
+  {{- with index $widths .Title }}{{ if lt . $w }}{{ $h = int (math.Round (div (mul (float $h) .) $w)) }}{{ $w = . }}{{ end }}{{ end -}}
+  {{- if eq .Title "voll" }}{{ $class = printf "%s foto-voll" $class }}{{ end -}}
+  <img class="{{ $class }}" src="{{ $img.RelPermalink }}" width="{{ $w }}" height="{{ $h }}" alt="{{ $alt }}" loading="lazy" decoding="async">
 {{- else -}}
   <img class="deko" src="{{ .Destination | safeURL }}" alt="{{ $alt }}" loading="lazy" decoding="async">
 {{- end -}}

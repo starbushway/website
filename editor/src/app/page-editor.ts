@@ -2,7 +2,8 @@ import { NgTemplateOutlet } from '@angular/common';
 import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { PageInfo } from './api';
-import { Block, imageUrl, newId, parseBody, Photo, serializeBody } from './blocks';
+import { Block, imageUrl, newId, parseBody, Photo, PHOTO_SIZES, PhotoSize, serializeBody } from './blocks';
+import { ImageEditor } from './image-editor';
 import { prepareImage } from './images';
 import { StatusService } from './status.service';
 import { TextBlock } from './text-block';
@@ -12,7 +13,7 @@ const SAVE_DELAY_MS = 800;
 /** Edits one page: its title, text blocks and photo rows. Saves by itself. */
 @Component({
   selector: 'app-page-editor',
-  imports: [FormsModule, NgTemplateOutlet, TextBlock],
+  imports: [FormsModule, NgTemplateOutlet, TextBlock, ImageEditor],
   template: `
     <div class="editor">
       <div class="editor-kopf">
@@ -29,6 +30,11 @@ const SAVE_DELAY_MS = 800;
         <button type="button" class="neben" (click)="undo()" [disabled]="!history().length">
           ↶ Rückgängig
         </button>
+        @if (!page().isSection) {
+          <button type="button" class="neben loeschen" (click)="deletePage.emit()" title="Diese Seite mit allen Fotos löschen">
+            🗑 Seite löschen
+          </button>
+        }
       </div>
 
       <ng-template #insert let-index>
@@ -62,9 +68,20 @@ const SAVE_DELAY_MS = 800;
                   }
                   <div class="foto-knoepfe">
                     <button type="button" (click)="movePhoto(block.id, j, -1)" [disabled]="pf" aria-label="Foto nach links">◀</button>
+                    <button type="button" (click)="editing.set({ block: block.id, index: j, src: url(photo) })"
+                            title="Zuschneiden, Licht und Farben anpassen" aria-label="Foto bearbeiten">✎</button>
                     <button type="button" class="loeschen" (click)="removePhoto(block.id, j)" aria-label="Foto löschen">🗑</button>
                     <button type="button" (click)="movePhoto(block.id, j, 1)" [disabled]="pl" aria-label="Foto nach rechts">▶</button>
                   </div>
+                  <label class="foto-groesse">
+                    <span class="unsichtbar">Größe auf der Website</span>
+                    <select [ngModel]="photo.size ?? ''" (ngModelChange)="setSize(block.id, j, $event || undefined)"
+                            title="Wie groß das Foto auf der Website erscheint">
+                      @for (s of sizes; track s.label) {
+                        <option [value]="s.value ?? ''">{{ s.label }}</option>
+                      }
+                    </select>
+                  </label>
                 </figure>
               }
               <label class="foto-hinzu">
@@ -79,12 +96,20 @@ const SAVE_DELAY_MS = 800;
         <ng-container [ngTemplateOutlet]="insert" [ngTemplateOutletContext]="{ $implicit: i + 1 }" />
       }
     </div>
+
+    @if (editing(); as e) {
+      <app-image-editor [src]="e.src" (done)="saveEdited($event)" (cancel)="editing.set(null)" />
+    }
   `,
 })
 export class PageEditor {
   private readonly status = inject(StatusService);
   readonly page = input.required<PageInfo>();
   readonly saved = output<void>();
+  readonly deletePage = output<void>();
+  readonly sizes = PHOTO_SIZES;
+  /** The photo open in the image editor. */
+  readonly editing = signal<{ block: number; index: number; src: string } | null>(null);
 
   readonly title = signal('');
   readonly blocks = signal<Block[]>([]);
@@ -217,6 +242,30 @@ export class PageEditor {
     this.status.info('Foto entfernt. Mit „Rückgängig“ holen Sie es zurück.');
   }
 
+  setSize(id: number, index: number, size: PhotoSize | undefined): void {
+    this.updatePhotos(id, (photos) => photos.map((p, i) => {
+      if (i !== index) return p;
+      const { size: _old, ...rest } = p;
+      return size ? { ...rest, size } : rest;
+    }));
+  }
+
+  /** The edited photo becomes a new file; the old one stays until publishing (for undo). */
+  async saveEdited(blob: Blob): Promise<void> {
+    const e = this.editing();
+    if (!e) return;
+    const block = this.blocks().find((b) => b.id === e.block);
+    const photo = block?.kind === 'photos' ? block.photos[e.index] : undefined;
+    if (!photo) return;
+    const stem = photo.src.split('/').pop()!.replace(/\.[^.]+$/, '').replace(/-bearbeitet(-\d+)?$/, '');
+    const ext = blob.type === 'image/png' ? 'png' : 'jpg';
+    const name = await this.status.run('Foto wird gespeichert', async () =>
+      window.starbush.addImage(this.page().dir, `${stem}-bearbeitet.${ext}`, await blob.arrayBuffer()));
+    if (!name) return;
+    this.editing.set(null);
+    this.updatePhotos(e.block, (photos) => photos.map((p, i) => (i === e.index ? { ...p, src: name } : p)));
+  }
+
   pick(event: Event, id: number): void {
     const inputEl = event.target as HTMLInputElement;
     const files = [...(inputEl.files ?? [])];
@@ -240,7 +289,7 @@ export class PageEditor {
         for (const file of files) {
           const img = await prepareImage(file);
           const name = await window.starbush.addImage(dir, img.name, img.data);
-          photos.push({ src: name, alt: '' });
+          photos.push({ src: name, alt: '', size: 'mittel' });
         }
         return photos;
       },

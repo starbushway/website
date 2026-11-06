@@ -131,6 +131,8 @@ a:hover { color: var(--rot); }
   border-radius: 6px;
   box-shadow: var(--schatten);
 }
+/* "Volle Breite" from the editor: as wide as the text column. */
+.inhalt img.foto-voll { display: block; width: 100%; margin: 6px auto; }
 /* A row made only of decorations (stars around a logo, crown bars) shrinks as one line
    instead of breaking apart on narrow screens. */
 .inhalt p:has(> img.deko + img.deko):not(:has(> img.foto, > a)) {

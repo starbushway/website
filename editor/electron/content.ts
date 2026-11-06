@@ -128,6 +128,42 @@ export class Content {
     return dir;
   }
 
+  /** Pages (other than the page itself) that link to `dir` or show its photos. */
+  linkingPages(dir: string): PageInfo[] {
+    const targets = this.addressesOf(dir);
+    return this.listPages().filter((p) => p.dir !== dir && unlink(this.readPage(p.dir).body, targets) !== null);
+  }
+
+  /**
+   * Deletes a page with its photos. Links to it elsewhere become plain text and photos
+   * linking to it are removed, so no page points to a missing address afterwards.
+   * Returns the pages that were changed that way.
+   */
+  deletePage(dir: string): PageInfo[] {
+    const page = this.listPages().find((p) => p.dir === dir);
+    if (!page) throw new Error(`Seite nicht gefunden: ${dir}`);
+    if (page.isSection || !dir) throw new Error('Menübereiche und die Startseite können nicht gelöscht werden.');
+    const folder = this.pageDir(dir);
+    if (fs.readdirSync(folder, { withFileTypes: true }).some((e) => e.isDirectory())) {
+      throw new Error('Diese Seite enthält Unterseiten und kann nicht gelöscht werden.');
+    }
+    const targets = this.addressesOf(dir);
+    const changed = this.linkingPages(dir);
+    for (const p of changed) {
+      const content = this.readPage(p.dir);
+      this.savePage(p.dir, { title: content.title, body: unlink(content.body, targets)! });
+    }
+    fs.rmSync(folder, { recursive: true });
+    return changed;
+  }
+
+  /** Addresses under which a page can be reached: its path and its old .html names. */
+  private addressesOf(dir: string): string[] {
+    const fm = splitFrontMatter(fs.readFileSync(this.pageFile(dir), 'utf8')).frontMatter;
+    const aliases = [...fm.matchAll(/^\s+-\s+"?([^"\n]+)"?\s*$/gm)].map((m) => m[1]!.trim());
+    return [`/${dir}`, ...aliases.filter((a) => a.startsWith('/'))];
+  }
+
   /** A file the UI may show, looked up like Hugo does: shared files first, then pages. */
   resolveAsset(rel: string): string | null {
     for (const root of [path.join(this.siteDir, 'static'), this.contentDir]) {
@@ -136,6 +172,29 @@ export class Content {
     }
     return null;
   }
+}
+
+/**
+ * Removes references to `targets` (a page path like "/katzen/luna" and its aliases) from a
+ * page body: linked photos and photos stored in that page are dropped, text links keep their
+ * text. Returns null when the body has no such reference.
+ */
+export function unlink(body: string, targets: string[]): string | null {
+  const alt = targets
+    .map((t) => {
+      const e = t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      // A page path also matches with a trailing slash, anchors and files inside it.
+      return t.endsWith('.html') || t.endsWith('.htm') ? `${e}(?:#[^)\\s]*)?` : `${e}(?:/[^)\\s]*)?`;
+    })
+    .join('|');
+  const dest = `(?:${alt})(?:\\s+"[^"]*")?`;
+  const linkedPhoto = new RegExp(`\\[!\\[[^\\]]*\\]\\([^)]*\\)\\]\\(${dest}\\)[ \\t]*\\\\?`, 'g');
+  const photo = new RegExp(`!\\[[^\\]]*\\]\\(${dest}\\)[ \\t]*\\\\?`, 'g');
+  const link = new RegExp(`(?<!!)\\[([^\\]]*)\\]\\(${dest}\\)`, 'g');
+  const result = body.replace(linkedPhoto, '').replace(photo, '').replace(link, '$1');
+  if (result === body) return null;
+  // Tidy rows that became empty.
+  return result.replace(/^[ \t\\]+$/gm, '').replace(/\n{3,}/g, '\n\n');
 }
 
 /** Link and image targets of a page, e.g. photos and the larger versions they link to. */

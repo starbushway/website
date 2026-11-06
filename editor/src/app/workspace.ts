@@ -96,7 +96,7 @@ interface Section {
               <p class="gross">Vorschau wird vorbereitet …</p>
             }
           } @else {
-            <app-page-editor [page]="page" (saved)="onSaved()" />
+            <app-page-editor [page]="page" (saved)="onSaved()" (deletePage)="askDelete(page)" />
           }
         } @else {
           <div class="willkommen">
@@ -108,6 +108,29 @@ interface Section {
         }
       </section>
     </div>
+
+    @if (deleting(); as d) {
+      <div class="warten" role="alertdialog" aria-modal="true" aria-labelledby="loeschen-titel">
+        <div class="dialog">
+          <h2 id="loeschen-titel">Seite „{{ d.page.title }}“ löschen?</h2>
+          <p>Die Seite und alle ihre Fotos werden gelöscht.</p>
+          @if (d.linking.length) {
+            <p>Auf {{ d.linking.length === 1 ? 'dieser Seite' : 'diesen Seiten' }} wird der Verweis darauf entfernt
+              (verlinkte Fotos verschwinden, Textlinks werden zu normalem Text):</p>
+            <ul>
+              @for (l of d.linking; track l.dir) { <li>{{ l.title }}</li> }
+            </ul>
+          } @else {
+            <p>Keine andere Seite verweist darauf.</p>
+          }
+          <p class="hilfe">Bis zum Veröffentlichen können Sie das mit „Änderungen verwerfen“ zurücknehmen.</p>
+          <div class="knoepfe">
+            <button type="button" class="neben" (click)="deleting.set(null)" autofocus>Abbrechen</button>
+            <button type="button" class="haupt" (click)="confirmDelete(d.page)">Ja, Seite löschen</button>
+          </div>
+        </div>
+      </div>
+    }
   `,
 })
 export class Workspace implements OnInit {
@@ -123,6 +146,7 @@ export class Workspace implements OnInit {
   readonly previewBase = signal<string | null>(null);
   readonly creatingIn = signal<string | null>(null);
   readonly editorName = signal('');
+  readonly deleting = signal<{ page: PageInfo; linking: PageInfo[] } | null>(null);
   newTitle = '';
 
   readonly sections = computed<Section[]>(() => {
@@ -202,6 +226,24 @@ export class Workspace implements OnInit {
       this.showPreview.set(false);
       this.status.info(`Die Seite „${title}“ wurde angelegt und auf „${section.title}“ verlinkt.`);
     }
+  }
+
+  async askDelete(page: PageInfo): Promise<void> {
+    await this.editor()?.flush();
+    const linking = await this.status.run('Verweise werden gesucht', () => window.starbush.linkingPages(page.dir));
+    if (linking) this.deleting.set({ page, linking });
+  }
+
+  async confirmDelete(page: PageInfo): Promise<void> {
+    this.deleting.set(null);
+    const changed = await this.status.run('Seite wird gelöscht', () => window.starbush.deletePage(page.dir));
+    if (!changed) return;
+    await this.refresh();
+    // Continue on the menu section the page belonged to.
+    this.current.set(this.pages().find((p) => p.isSection && p.dir === page.section) ?? null);
+    this.showPreview.set(false);
+    this.status.info(`Die Seite „${page.title}“ wurde gelöscht.` +
+      (changed.length ? ` Verweise entfernt auf: ${changed.map((c) => c.title).join(', ')}.` : ''));
   }
 
   async onSaved(): Promise<void> {
